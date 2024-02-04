@@ -1,23 +1,31 @@
-import {View, Text, SafeAreaView} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { StackNavigationProp, StackScreenProps, createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './Screens/HomeScreen';
 import ProfileScreen from './Screens/ProfileScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const Stack = createNativeStackNavigator();
+export type StackParamList = {
+  HomeScreen: StackScreenProps<StackParamList, 'HomeScreen'>;
+  ProfileScreen: StackScreenProps<StackParamList, 'ProfileScreen'>;
+}
+
+const Stack = createStackNavigator<StackParamList>();
 
 const App = () => {
   return (
+    <SafeAreaProvider>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Home"
+          name="HomeScreen"
           component={HomeScreen}
-          options={{title: 'Welcome'}}
+          options={{headerShown: false}}
+          
         />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{headerShown: false}} />
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 

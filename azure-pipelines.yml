@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'macos-latest' 
 
 steps:
 - task: NodeTool@0
@@ -26,3 +26,17 @@ steps:
 - task: AndroidSigning@3
   inputs:
     apkFiles: '**/*.apk'
+# Archive the .ipa file for upload
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'ios/build/Release-iphoneos'
+    Contents: '**/*.ipa'
+    TargetFolder: '$(build.artifactStagingDirectory)/ipa'
+  displayName: 'Copy IPA File'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(build.artifactStagingDirectory)/ipa'
+    ArtifactName: 'ipa'
+    publishLocation: 'Container'
+  displayName: 'Publish IPA Artifact'
